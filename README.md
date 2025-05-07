@@ -1,6 +1,6 @@
 Fortgeschrittene Programmierung (Java 2)
 
-# Übung 5
+# Übung 3
 
 
 Klonen Sie dieses Repository direkt in Eclipse und importieren Sie das Projekt. Legen Sie einen neuen Branch an, den Sie nach Ihrem GitHub-Benutzernamen benennen.
