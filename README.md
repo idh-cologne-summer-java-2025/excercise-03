@@ -2,6 +2,7 @@ Fortgeschrittene Programmierung (Java 2)
 
 # Übung 3
 
+**Achtung:** Am Ende der Stunde vom 7.5. sind wir noch nicht so weit gekommen, dass Sie auch Aufgabe 2 lösen können. Nehmen Sie sich also erst einmal Aufgabe 1 vor bis zum 13.5.! 
 
 Klonen Sie dieses Repository direkt in Eclipse und importieren Sie das Projekt. Legen Sie einen neuen Branch an, den Sie nach Ihrem GitHub-Benutzernamen benennen.
 
