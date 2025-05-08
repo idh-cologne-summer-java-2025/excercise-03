@@ -4,11 +4,12 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class Document{
+public class Document implements Iterable<String>{
 	String documentText;
 
 	public static Document readFromFile(File f) throws IOException {
@@ -35,9 +36,17 @@ public class Document{
 	
 	public static final void main(String[] args) throws IOException {
 		Document d = Document.readFromFile(new File("data/dracula.txt"));
+		for(String token : d) {
+			System.out.println(token);
+		}
+	}	
 		
+	public Iterator<String> iterator() {
+	     StringTokenizer st = new StringTokenizer(documentText);
+	     List<String> list = new ArrayList<String>();
+	     while(st.hasMoreTokens()) {
+	    	 list.add(st.nextToken());
+	     }
+	     return list.iterator();
 	}
-
-	
-	
 }
