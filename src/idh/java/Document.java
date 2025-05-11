@@ -1,16 +1,22 @@
+/*
+- make Document class iterable X
+- split String into tokens using StringTokenizer X
+- iterate over Tokens using Iterators + put out on console X
+*/
 package idh.java;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class Document{
+public class Document implements Iterable<String>{
 	String documentText;
-
+	
 	public static Document readFromFile(File f) throws IOException {
 		FileReader fileReader = new FileReader(f);
 		int ch;
@@ -21,10 +27,9 @@ public class Document{
 		fileReader.close();
 		Document doc = new Document();
 		doc.documentText = b.toString();
-		
 		return doc;
 	}
-	
+
 	public String getDocumentText() {
 		return documentText;
 	}
@@ -35,9 +40,20 @@ public class Document{
 	
 	public static final void main(String[] args) throws IOException {
 		Document d = Document.readFromFile(new File("data/dracula.txt"));
-		
+		StringTokenizer tokenizer = new StringTokenizer(d.getDocumentText());
+		List<String> l = new ArrayList<String>();
+		while (tokenizer.hasMoreTokens()) {
+			String tokens = tokenizer.nextToken();
+			l.add(tokens);
+		}
+		for (String string : l) {
+			System.out.println(string);
+		}
 	}
 
-	
-	
+	@Override
+	public Iterator<String> iterator() {
+		// TODO Auto-generated method stub
+		return this.iterator();
+	}
 }
