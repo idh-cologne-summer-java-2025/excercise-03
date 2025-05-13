@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class Document{
+public class Document implements Iterable<String>{
 	String documentText;
 
 	public static Document readFromFile(File f) throws IOException {
@@ -32,12 +32,29 @@ public class Document{
 	public void setDocumentText(String documentText) {
 		this.documentText = documentText;
 	}
-	
-	public static final void main(String[] args) throws IOException {
-		Document d = Document.readFromFile(new File("data/dracula.txt"));
-		
+
+	public Iterator<String> iterator() {
+		return new Iterator<String>() {
+			StringTokenizer tokenizer = new StringTokenizer(documentText);
+
+			@Override
+			public boolean hasNext() {
+				return tokenizer.hasMoreTokens();
+			}
+
+			@Override
+			public String next() {
+				return tokenizer.nextToken();
+			}
+		};
 	}
 
-	
-	
+	public static final void main(String[] args) throws IOException {
+		Document d = Document.readFromFile(new File("data/dracula.txt"));
+
+		// Token-Ausgabe
+		for (String token : d) {
+			System.out.println(token);
+		}
+	}
 }
