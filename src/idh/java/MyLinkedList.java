@@ -30,7 +30,13 @@ public class MyLinkedList<T> implements List<T> {
 	@Override
 	public int size() {
 		// TODO Implement!
-		return 0;
+		int counter = 0;
+		while(this.iterator().hasNext()) {
+			counter++;
+		} if(this.iterator().hasNext()==false) {
+			return counter;
+		}
+		return counter;
 	}
 
 	@Override
@@ -295,6 +301,7 @@ public class MyLinkedList<T> implements List<T> {
 		for (String s : ll) {
 			System.out.println(s);
 		}
+		System.out.println(ll.size());
 
 	}
 }

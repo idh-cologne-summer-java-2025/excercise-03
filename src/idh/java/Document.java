@@ -53,7 +53,7 @@ public class Document implements Iterable<String>{
 
 	@Override
 	public Iterator<String> iterator() {
-		// TODO Auto-generated method stub
+		// the Tokenizer could/should rather be put in here
 		return this.iterator();
 	}
 }
