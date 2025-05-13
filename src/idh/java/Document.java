@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class Document implements Iterable<String> {
+public class Document implements Iterable<String>{
 	String documentText;
 
 	public static Document readFromFile(File f) throws IOException {
@@ -21,10 +21,10 @@ public class Document implements Iterable<String> {
 		fileReader.close();
 		Document doc = new Document();
 		doc.documentText = b.toString();
-		
+
 		return doc;
 	}
-	
+
 	public String getDocumentText() {
 		return documentText;
 	}
@@ -32,42 +32,32 @@ public class Document implements Iterable<String> {
 	public void setDocumentText(String documentText) {
 		this.documentText = documentText;
 	}
-	
+
+
+	// Implementation of the Iterable interface
+	@Override
+	public Iterator<String> iterator() {
+		return new Iterator<String>() {
+			private StringTokenizer tokenizer = new StringTokenizer(documentText);
+			@Override
+			public boolean hasNext() {
+				return tokenizer.hasMoreTokens();
+			}
+
+			@Override
+			public String next() {
+				return tokenizer.nextToken();
+			}
+		};
+	}
+
 	public static final void main(String[] args) throws IOException {
 		Document d = Document.readFromFile(new File("data/dracula.txt"));
-		for(String token : d) {
+		for (String token : d) {
 			System.out.println(token);
 		}
 	}
 
-	@Override
-	public Iterator<String> iterator() {
-		StringTokenizer st = new StringTokenizer(documentText);
-		List<String> list = new LinkedList<String>();
-		while(st.hasMoreTokens()) {
-			list.add(st.nextToken());
-		}
-		return list.iterator();
-	}
-	
-	class DocumentIterator implements Iterator<String> {
 
-		StringTokenizer st;
-		public DocumentIterator(String s) {
-			 st = new StringTokenizer(s);
 
-		}
-		
-		@Override
-		public boolean hasNext() {
-			return st.hasMoreTokens();
-		}
-
-		@Override
-		public String next() {
-			return st.nextToken();
-		}
-		
-	}
-	
 }

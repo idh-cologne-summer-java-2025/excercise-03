@@ -24,7 +24,7 @@ public class MyLinkedList<T> implements List<T> {
 	 * know whether there is a next element.
 	 */
 	private ListElement first;
-	
+
 	private ListElement last;
 
 	@Override
@@ -105,7 +105,7 @@ public class MyLinkedList<T> implements List<T> {
 			first = newListElement;
 			last = first;
 		}
-		
+
 		else {
 			last.next = newListElement;
 			last = last.next;
@@ -256,7 +256,7 @@ public class MyLinkedList<T> implements List<T> {
 	/**
 	 * Internal method to get the list element (not the value) of the list at the
 	 * specified index position.
-	 * 
+	 *
 	 * @param index
 	 * @return
 	 */
@@ -273,7 +273,7 @@ public class MyLinkedList<T> implements List<T> {
 		return null;
 	}
 
-	
+
 	@Override
 	public boolean contains(Object o) {
 		// Diese Methode können Sie erst einmal ignorieren
@@ -285,7 +285,7 @@ public class MyLinkedList<T> implements List<T> {
 		// Diese Methode können Sie erst einmal ignorieren
 		return false;
 	}
-	
+
 	public static void main(String[] args) {
 		MyLinkedList<String> ll = new MyLinkedList<String>();
 		ll.add("Hallo");
