@@ -55,8 +55,9 @@ public class Document implements Iterable<String> {
 		 for (String token : d) {
                System.out.println(token);
             }
-						System.out.println();
-						System.out.println("THE END");
+	
+		System.out.println();
+		System.out.println("THE END");
 	}
 
 	
