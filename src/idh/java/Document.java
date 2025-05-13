@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+//Iterable
 public class Document implements Iterable<String> {
 	String documentText;
 
@@ -39,7 +40,7 @@ public class Document implements Iterable<String> {
 			System.out.println(token);
 		}
 	}
-
+//Iterator
 	@Override
 	public Iterator<String> iterator() {
 		StringTokenizer st = new StringTokenizer(documentText);
