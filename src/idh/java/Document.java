@@ -33,11 +33,10 @@ public class Document implements Iterable<String>{
 		this.documentText = documentText;
 	}
 	
-	public static final void main(String[] args) throws IOException {
-		Document d = Document.readFromFile(new File("data/dracula.txt"));
-		
-	}
-
-	
-	
+public static final void main(String[] args) throws IOException {
+    Document d = Document.readFromFile(new File("data/dracula.txt"));
+    for (String token : d) {
+        System.out.println(token);
+    }
 }
+
