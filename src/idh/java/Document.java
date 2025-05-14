@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class Document{
+public class Document implements Iterable<String>{
 	String documentText;
 
 	public static Document readFromFile(File f) throws IOException {
