@@ -27,34 +27,114 @@ public class MyLinkedList<T> implements List<T> {
 	
 	private ListElement last;
 
-	@Override
 	public int size() {
-		// TODO Implement!
-		return 0;
+	    int count = 0;
+	    ListElement current = first;
+	    while (current != null) {
+	        count++;
+	        current = current.next;
+	    }
+	    return count;
 	}
 
-	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
-		// TODO Implement!
-		return false;
+	    if (index < 0 || index > size()) {
+	        throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size());
+	    }
+
+	    if (c.isEmpty()) {
+	        return false;
+	    }
+
+	    ListElement current = getElement(index - 1); // Element before the insertion point
+	    ListElement next = (current == null) ? first : current.next; // Element at the insertion point
+
+	    for (T element : c) {
+	        ListElement newElement = new ListElement(element); // Create a new ListElement
+	        if (current == null) {
+	            // Inserting at the beginning
+	        } else {
+	            current.next = newElement;
+	        }
+	        current = newElement;
+	    }
+
+	    if (next == null) {
+	        // If inserting at the end, update the last reference
+	        last = current;
+	    } else {
+	        current.next = next;
+	    }
+
+	    return true;
 	}
 
 	@Override
 	public T set(int index, T element) {
-		// TODO: Implement
+		ListElement current = getElement(index);
+		if (current != null) {
+			T oldValue = current.value;
+			current.value = element;
+			return oldValue;
+		}
 		return null;
 	}
 
 	@Override
 	public void add(int index, T element) {
-		// TODO: Implement
+		if (index < 0 || index > size()) {
+			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size());
+		}
+
+		ListElement newElement = new ListElement(element);
+		if (index == 0) {
+			newElement.next = first;
+			first = newElement;
+			if (last == null) {
+				last = first;
+			}
+		} else {
+			ListElement current = getElement(index - 1);
+			newElement.next = current.next;
+			current.next = newElement;
+			if (newElement.next == null) {
+				last = newElement;
+			}
+		}
 	}
 
 	@Override
 	public T remove(int index) {
-		// TODO: Implement
-		return null;
+	    if (index < 0 || index >= size()) {
+	        throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size());
+	    }
+
+	    ListElement removedElement;
+
+	    if (index == 0) {
+	        removedElement = first;
+	        first = first.next;
+	        if (first == null) {
+	            last = null; // List is now empty
+	        }
+	    } else {
+	        ListElement previous = getElement(index - 1);
+	        removedElement = previous.next;
+	        previous.next = removedElement.next;
+	        if (removedElement.next == null) {
+	            last = previous; // Removed the last element
+	        }
+	    }
+
+	    return removedElement.value;
 	}
+
+	@Override
+	public boolean isEmpty() {
+		
+		return first == null;
+	}
+
 
 	@Override
 	public boolean isEmpty() {
@@ -87,15 +167,32 @@ public class MyLinkedList<T> implements List<T> {
 	}
 
 	@Override
+	public Object[] toArray() {
+	    Object[] array = new Object[size()];
+	    ListElement current = first;
+	    int index = 0;
+	    while (current != null) {
+	        array[index++] = current.value;
+	        current = current.next;
+	    }
+	    return array;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
 	public <E> E[] toArray(E[] a) {
-		if (a.length < size()) {
-			a = (E[]) new Object[size()];
-		}
-		int i = 0;
-		for (T t : this) {
-			a[i++] = (E) t;
-		}
-		return a;
+	    if (a.length < size()) {
+	        a = (E[]) java.lang.reflect.Array.newInstance(a.getClass().getComponentType(), size());
+	    }
+	    int i = 0;
+	    Object[] result = a;
+	    for (T t : this) {
+	        result[i++] = t;
+	    }
+	    if (a.length > size()) {
+	        a[size()] = null; 
+	    }
+	    return a;
 	}
 
 	@Override
@@ -276,13 +373,13 @@ public class MyLinkedList<T> implements List<T> {
 	
 	@Override
 	public boolean contains(Object o) {
-		// Diese Methode können Sie erst einmal ignorieren
+		
 		return false;
 	}
 
 	@Override
 	public boolean remove(Object o) {
-		// Diese Methode können Sie erst einmal ignorieren
+		
 		return false;
 	}
 	
