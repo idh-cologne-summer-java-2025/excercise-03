@@ -29,31 +29,80 @@ public class MyLinkedList<T> implements List<T> {
 
 	@Override
 	public int size() {
-		// TODO Implement!
-		return 0;
+		int size = 0;
+		ListElement current = first;
+		while (current != null) {
+			size++;
+			current = current.next;
+		}
+		return size;
 	}
 
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
-		// TODO Implement!
-		return false;
+		if (index < 0 || index > size()) {
+			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size());
+		}
+		for (T element : c) {
+			add(index++, element);
+		}
+		return !c.isEmpty();
 	}
 
 	@Override
 	public T set(int index, T element) {
-		// TODO: Implement
+		ListElement current = getElement(index);
+		if (current != null) {
+			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size());
+		}
+		T oldValue = current.value;
+		current.value = element;
 		return null;
 	}
 
 	@Override
 	public void add(int index, T element) {
-		// TODO: Implement
+		if (index < 0 || index > size()) {
+			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size());
+		}
+		ListElement newElement = new ListElement(element);
+		if (index == 0) {
+			newElement.next = first;
+			first = newElement;
+			if (last == null) {
+				last = first;
+			}
+		} else {
+			ListElement previous = getElement(index - 1);
+			newElement.next = previous.next;
+			previous.next = newElement;
+			if (newElement.next == null) {
+				last = newElement;
+			}
+		}
 	}
 
 	@Override
 	public T remove(int index) {
-		// TODO: Implement
-		return null;
+		if (index < 0 || index > size()) {
+			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size());
+		}
+		if (index == 0) {
+			T value = first.value;
+			first = first.next;
+			if (first == null) {
+				last = null;
+			}
+			return value;
+		} else {
+			ListElement previous = getElement(index - 1);
+			T value = previous.next.value;
+			previous.next = previous.next.next;
+			if (previous.next == null) {
+				last = previous;
+			}
+			return value;
+		}
 	}
 
 	@Override
