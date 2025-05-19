@@ -26,34 +26,110 @@ public class MyLinkedList<T> implements List<T> {
 	private ListElement first;
 	
 	private ListElement last;
+	
+	private int size=0;
 
 	@Override
 	public int size() {
-		// TODO Implement!
-		return 0;
+		return size;
 	}
 
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
-		// TODO Implement!
-		return false;
+		checkIndex(index);
+	    if (c.isEmpty()) return false;
+	    
+	    ListElement currentElement = getElement(index - 1);
+	    ListElement nextElement;
+	    if(currentElement == null) {
+	    	nextElement = first;
+	    }
+	    else {
+	    	nextElement = currentElement.next;
+	    }
+	    for (T element : c) {
+	    	ListElement newListElement = new ListElement(element);
+	        if (currentElement == null) {
+	        	newListElement.next = first;
+				first = newListElement;
+				if (last == null) {
+					last = first;
+				}
+	        } 
+	        else {
+	            currentElement.next = newListElement;
+	        }
+	        currentElement = newListElement;
+	    }
+	    
+	    if (nextElement == null) {
+	        last = currentElement;
+	    } 
+	    else {
+	        currentElement.next = nextElement;
+	    }
+
+	    return true;
 	}
 
 	@Override
 	public T set(int index, T element) {
-		// TODO: Implement
-		return null;
+		checkIndex(index);
+		ListElement currentElement = this.getElement(index);
+		T oldValue = currentElement.value;
+		currentElement.value = element;
+		return oldValue;
 	}
 
 	@Override
 	public void add(int index, T element) {
-		// TODO: Implement
+		checkIndex(index);
+		
+		ListElement newListElement = new ListElement(element); 
+		if (index == 0) {
+			newListElement.next = first;
+			first = newListElement;
+			if (last == null) {
+				last = first;
+			}
+		} 
+		else {
+			ListElement currentElement = this.getElement(index-1);
+			newListElement.next = currentElement.next;
+			currentElement.next = newListElement;
+			if (newListElement.next == null) {
+				last = newListElement;
+			}
+		}
+		size++;
 	}
+	public void checkIndex(int index) {
+		if (index < 0 || index >=size) {
+			throw new IndexOutOfBoundsException("Index: "+ index + ", Size: "+size);
+		}
+	}
+	
 
 	@Override
 	public T remove(int index) {
-		// TODO: Implement
-		return null;
+		checkIndex(index);
+		ListElement removedElement; 
+		if (index == 0) {
+	        removedElement = first;
+	        first = first.next;
+	        if (first == null) {
+	        	last = null;
+	        }
+        } else {
+	        ListElement previousElement = this.getElement(index - 1);
+	        removedElement = previousElement.next;
+	        previousElement.next = removedElement.next;
+	        if (removedElement.next == null) {
+	            last = previousElement; 
+	        }
+	    }
+		size--;
+		return removedElement.value;
 	}
 
 	@Override
@@ -289,7 +365,7 @@ public class MyLinkedList<T> implements List<T> {
 	public static void main(String[] args) {
 		MyLinkedList<String> ll = new MyLinkedList<String>();
 		ll.add("Hallo");
-		ll.add("Welt");
+		ll.add(0,"Welt");
 		ll.add("Welt");
 		ll.get(0);
 		for (String s : ll) {
