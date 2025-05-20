@@ -26,11 +26,17 @@ public class MyLinkedList<T> implements List<T> {
 	private ListElement first;
 	
 	private ListElement last;
+	
+
 
 	@Override
 	public int size() {
-		// TODO Implement!
-		return 0;
+		int size = 0;
+		ListElement current = first;
+		while (current !=null ) {
+			size++;
+		}
+		return size;
 	}
 
 	@Override
@@ -47,8 +53,19 @@ public class MyLinkedList<T> implements List<T> {
 
 	@Override
 	public void add(int index, T element) {
-		// TODO: Implement
-	}
+		ListElement newElement = new ListElement (element);
+		
+		if (index ==0)
+		{
+			newElement.next = first;
+			first = newElement;
+		} else {
+			ListElement current = getElement(index-1);
+			newElement.next = current.next;
+			current.next = newElement;
+		}
+		
+    }
 
 	@Override
 	public T remove(int index) {
@@ -282,7 +299,13 @@ public class MyLinkedList<T> implements List<T> {
 
 	@Override
 	public boolean remove(Object o) {
-		// Diese Methode können Sie erst einmal ignorieren
+		if (isEmpty()) returne false;
+		if (first.payload.equals(o)) {
+			current.next = current.next.next;
+			returne true;
+		}
+	     current = current.next;
+	}
 		return false;
 	}
 	
