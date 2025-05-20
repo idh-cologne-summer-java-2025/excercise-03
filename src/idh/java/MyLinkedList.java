@@ -7,9 +7,6 @@ import java.util.ListIterator;
 
 public class MyLinkedList<T> implements List<T> {
 
-	/**
-	 * Helper class for the list elements
-	 */
 	private class ListElement {
 		T value;
 		ListElement next;
@@ -19,41 +16,106 @@ public class MyLinkedList<T> implements List<T> {
 		}
 	}
 
-	/**
-	 * We only need to store the very first element of our list, because it will
-	 * know whether there is a next element.
-	 */
 	private ListElement first;
-	
 	private ListElement last;
 
 	@Override
 	public int size() {
-		// TODO Implement!
-		return 0;
+		int count = 0;
+		ListElement current = first;
+		while (current != null) {
+			count++;
+			current = current.next;
+		}
+		return count;
 	}
 
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
-		// TODO Implement!
-		return false;
+		if (c.isEmpty()) return false;
+
+		MyLinkedList<T> temp = new MyLinkedList<>();
+		for (T item : c) {
+			temp.add(item);
+		}
+
+		if (index == 0) {
+			temp.last.next = first;
+			first = temp.first;
+			if (last == null) last = temp.last;
+			return true;
+		}
+
+		ListElement prev = getElement(index - 1);
+		if (prev == null) throw new IndexOutOfBoundsException();
+
+		temp.last.next = prev.next;
+		prev.next = temp.first;
+
+		if (temp.last.next == null) last = temp.last;
+
+		return true;
 	}
 
 	@Override
 	public T set(int index, T element) {
-		// TODO: Implement
-		return null;
+		ListElement target = getElement(index);
+		if (target == null) {
+			throw new IndexOutOfBoundsException();
+		}
+		T oldValue = target.value;
+		target.value = element;
+		return oldValue;
 	}
 
 	@Override
 	public void add(int index, T element) {
-		// TODO: Implement
+		ListElement newElement = new ListElement(element);
+
+		if (index == 0) {
+			newElement.next = first;
+			first = newElement;
+			if (last == null) last = newElement;
+			return;
+		}
+
+		ListElement prev = getElement(index - 1);
+		if (prev == null) {
+			throw new IndexOutOfBoundsException();
+		}
+
+		newElement.next = prev.next;
+		prev.next = newElement;
+
+		if (newElement.next == null) {
+			last = newElement;
+		}
 	}
 
 	@Override
 	public T remove(int index) {
-		// TODO: Implement
-		return null;
+		if (index == 0) {
+			if (first == null) {
+				throw new IndexOutOfBoundsException();
+			}
+			T value = first.value;
+			first = first.next;
+			if (first == null) last = null;
+			return value;
+		}
+
+		ListElement prev = getElement(index - 1);
+		if (prev == null || prev.next == null) {
+			throw new IndexOutOfBoundsException();
+		}
+		T value = prev.next.value;
+		prev.next = prev.next.next;
+
+		if (prev.next == null) {
+			last = prev;
+		}
+
+		return value;
 	}
 
 	@Override
@@ -77,7 +139,6 @@ public class MyLinkedList<T> implements List<T> {
 				next = next.next;
 				return ret;
 			}
-
 		};
 	}
 
@@ -104,9 +165,7 @@ public class MyLinkedList<T> implements List<T> {
 		if (first == null) {
 			first = newListElement;
 			last = first;
-		}
-		
-		else {
+		} else {
 			last.next = newListElement;
 			last = last.next;
 		}
@@ -144,11 +203,14 @@ public class MyLinkedList<T> implements List<T> {
 	@Override
 	public void clear() {
 		first = null;
+		last = null;
 	}
 
 	@Override
 	public T get(int index) {
-		return getElement(index).value;
+		ListElement element = getElement(index);
+		if (element == null) throw new IndexOutOfBoundsException();
+		return element.value;
 	}
 
 	@Override
@@ -238,7 +300,6 @@ public class MyLinkedList<T> implements List<T> {
 			public void add(T e) {
 				throw new UnsupportedOperationException();
 			}
-
 		};
 	}
 
@@ -252,17 +313,8 @@ public class MyLinkedList<T> implements List<T> {
 		throw new UnsupportedOperationException();
 	}
 
-
-	/**
-	 * Internal method to get the list element (not the value) of the list at the
-	 * specified index position.
-	 * 
-	 * @param index
-	 * @return
-	 */
 	private ListElement getElement(int index) {
-		if (isEmpty())
-			return null;
+		if (index < 0 || isEmpty()) return null;
 		ListElement current = first;
 		while (current != null) {
 			if (index == 0)
@@ -273,19 +325,40 @@ public class MyLinkedList<T> implements List<T> {
 		return null;
 	}
 
-	
 	@Override
 	public boolean contains(Object o) {
-		// Diese Methode können Sie erst einmal ignorieren
+		ListElement current = first;
+		while (current != null) {
+			if (current.value.equals(o)) {
+				return true;
+			}
+			current = current.next;
+		}
 		return false;
 	}
 
 	@Override
 	public boolean remove(Object o) {
-		// Diese Methode können Sie erst einmal ignorieren
+		if (first == null) return false;
+
+		if (first.value.equals(o)) {
+			first = first.next;
+			if (first == null) last = null;
+			return true;
+		}
+
+		ListElement current = first;
+		while (current.next != null) {
+			if (current.next.value.equals(o)) {
+				current.next = current.next.next;
+				if (current.next == null) last = current;
+				return true;
+			}
+			current = current.next;
+		}
 		return false;
 	}
-	
+
 	public static void main(String[] args) {
 		MyLinkedList<String> ll = new MyLinkedList<String>();
 		ll.add("Hallo");
@@ -295,6 +368,5 @@ public class MyLinkedList<T> implements List<T> {
 		for (String s : ll) {
 			System.out.println(s);
 		}
-
 	}
 }
