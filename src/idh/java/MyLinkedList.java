@@ -29,32 +29,83 @@ public class MyLinkedList<T> implements List<T> {
 
 	@Override
 	public int size() {
-		// TODO Implement!
-		return 0;
+		int size = 0;
+		ListElement current = first;
+		while (current !=null) {
+			size++;
+			current = current.next;
+		}
+		return size;
+		
 	}
 
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
-		// TODO Implement!
+//to implement
 		return false;
+		
 	}
 
 	@Override
 	public T set(int index, T element) {
-		// TODO: Implement
-		return null;
+        ListElement current = getElement(index);
+        if (current == null) throw new IndexOutOfBoundsException();
+        T oldValue = current.value;
+        current.value = element;
+        return oldValue;
 	}
 
 	@Override
-	public void add(int index, T element) {
-		// TODO: Implement
-	}
+	 public void add(int index, T element) {
+        ListElement newElement = new ListElement(element);
 
-	@Override
-	public T remove(int index) {
-		// TODO: Implement
-		return null;
-	}
+        if (index == 0) {
+            newElement.next = first;
+            first = newElement;
+            if (last == null) {
+                last = newElement;
+            }
+            return;
+        }
+        
+        ListElement prev = getElement(index - 1);
+        if (prev == null) throw new IndexOutOfBoundsException();
+
+        newElement.next = prev.next;
+        prev.next = newElement;
+
+        if (newElement.next == null) {
+            last = newElement;
+        }
+    }
+	
+	
+	 @Override
+	    public T remove(int index) {
+	        if (index == 0) {
+	            if (first == null) throw new IndexOutOfBoundsException();
+	            T value = first.value;
+	            first = first.next;
+	            if (first == null) {
+	                last = null;
+	            }
+	            return value;
+	        }
+
+	        ListElement prev = getElement(index - 1);
+	        if (prev == null || prev.next == null) throw new IndexOutOfBoundsException();
+
+	        T value = prev.next.value;
+	        prev.next = prev.next.next;
+
+	        if (prev.next == null) {
+	            last = prev;
+	        }
+
+	        return value;
+	    }
+
+	
 
 	@Override
 	public boolean isEmpty() {
