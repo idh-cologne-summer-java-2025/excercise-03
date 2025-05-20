@@ -29,32 +29,109 @@ public class MyLinkedList<T> implements List<T> {
 
 	@Override
 	public int size() {
-		// TODO Implement!
-		return 0;
+	    int count = 0;
+	    ListElement current = first;
+	    while (current != null) {
+	        count++;
+	        current = current.next;
+	    }
+	    return count;
 	}
+
 
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
-		// TODO Implement!
-		return false;
+	    if (c.isEmpty()) return false;
+
+	    Iterator<? extends T> it = c.iterator();
+	    ListElement firstNew = new ListElement(it.next());
+	    ListElement currentNew = firstNew;
+
+	    while (it.hasNext()) {
+	        ListElement nextNew = new ListElement(it.next());
+	        currentNew.next = nextNew;
+	        currentNew = nextNew;
+	    }
+
+
+	    if (index == 0) {
+	        currentNew.next = first;
+	        first = firstNew;
+	        if (last == null) {
+	            last = currentNew;
+	        }
+	    } else {
+	        ListElement before = getElement(index - 1);
+	        currentNew.next = before.next;
+	        before.next = firstNew;
+	        if (before == last) {
+	            last = currentNew;
+	        }
+	    }
+
+	    return true;
 	}
+
 
 	@Override
 	public T set(int index, T element) {
-		// TODO: Implement
-		return null;
+	    ListElement target = getElement(index);
+	    T old = target.value;
+	    target.value = element;
+	    return old;
 	}
+
 
 	@Override
 	public void add(int index, T element) {
-		// TODO: Implement
+	    ListElement newElement = new ListElement(element);
+
+	    if (index == 0) {
+	        newElement.next = first;
+	        first = newElement;
+	        if (last == null) {
+	            last = newElement;
+	        }
+	        return;
+	    }
+
+	    ListElement before = getElement(index - 1);
+	    newElement.next = before.next;
+	    before.next = newElement;
+
+	    if (before == last) {
+	        last = newElement;
+	    }
 	}
+
 
 	@Override
 	public T remove(int index) {
-		// TODO: Implement
-		return null;
+	    if (index == 0) {
+	        T removed = first.value;
+	        first = first.next;
+	        if (first == null) {
+	            last = null; // Liste ist jetzt leer
+	        }
+	        return removed;
+	    }
+
+	    ListElement before = getElement(index - 1);
+	    ListElement toRemove = before.next;
+
+	    if (toRemove == null) {
+	        return null; // Index war ungültig
+	    }
+
+	    before.next = toRemove.next;
+
+	    if (toRemove == last) {
+	        last = before;
+	    }
+
+	    return toRemove.value;
 	}
+
 
 	@Override
 	public boolean isEmpty() {
@@ -261,16 +338,14 @@ public class MyLinkedList<T> implements List<T> {
 	 * @return
 	 */
 	private ListElement getElement(int index) {
-		if (isEmpty())
-			return null;
+		if (index < 0 || index >= size()) {
+			throw new IndexOutOfBoundsException("Index: " + index);
+		}
 		ListElement current = first;
-		while (current != null) {
-			if (index == 0)
-				return current;
-			index--;
+		while (index-- > 0) {
 			current = current.next;
 		}
-		return null;
+		return current;
 	}
 
 	
