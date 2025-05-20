@@ -42,8 +42,32 @@ public class MyLinkedList<T> implements List<T> {
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
 		// TODO Implement!
+		if (index < 0 || index > size()) {
+			throw new IndexOutOfBoundsException();
+		}
+		if (c.isEmpty()) return false;
 		
-		return false;
+		MyLinkedList<T> tempList = new MyLinkedList<>();
+		for (T item : c) {
+			tempList.add(item);
+		}
+		
+		ListElement before = (index == 0) ? null : getElement(index - 1);
+		ListElement after = (index == size()) ? null : getElement(index);
+
+		if (before == null) {
+			tempList.last.next = first;
+			first = tempList.first;
+		} else {
+			tempList.last.next = before.next;
+			before.next = tempList.first;
+		}
+
+		if (after == null) {
+			last = tempList.last;
+		}
+
+		return true;
 	}
 
 	@Override
@@ -59,13 +83,51 @@ public class MyLinkedList<T> implements List<T> {
 	@Override
 	public void add(int index, T element) {
 		// TODO: Implement
+		if (index < 0 || index > size()) {
+			throw new IndexOutOfBoundsException();
+		}
+
+		ListElement newElement = new ListElement(element);
+
+		if (index == 0) {
+			newElement.next = first;
+			first = newElement;
+			if (last == null) last = newElement;
+			return;
+		}
+
+		ListElement prev = getElement(index - 1);
+		newElement.next = prev.next;
+		prev.next = newElement;
+
+		if (newElement.next == null) {
+			last = newElement;
+		}
 	}
 
 	@Override
 	public T remove(int index) {
 		// TODO: Implement
-		return null;
+		if (index < 0 || index >= size()) {
+			throw new IndexOutOfBoundsException();
+		}
+
+		if (index == 0) {
+			T value = first.value;
+			first = first.next;
+			if (first == null) last = null;
+			return value;
+		}
+
+		ListElement prev = getElement(index - 1);
+		ListElement toRemove = prev.next;
+		prev.next = toRemove.next;
+
+		if (prev.next == null) last = prev;
+
+		return toRemove.value;
 	}
+
 
 	@Override
 	public boolean isEmpty() {
