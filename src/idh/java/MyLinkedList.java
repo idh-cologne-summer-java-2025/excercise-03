@@ -29,32 +29,114 @@ public class MyLinkedList<T> implements List<T> {
 
 	@Override
 	public int size() {
-		// TODO Implement!
-		return 0;
+		int count = 0;
+		ListElement current = first;
+		while (current != null) {
+			count++;
+			current = current.next;
+		}
+		return count;
 	}
+
 
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
-		// TODO Implement!
-		return false;
+		if (index < 0 || index > size()) {
+			throw new IndexOutOfBoundsException();
+		}
+		if (c.isEmpty()) {
+			return false;
+		}
+
+		MyLinkedList<T> tempList = new MyLinkedList<>();
+		for (T element : c) {
+			tempList.add(element);
+		}
+
+		if (index == 0) {
+			tempList.last.next = first;
+			first = tempList.first;
+			if (last == null) {
+				last = tempList.last;
+			}
+			return true;
+		}
+
+		ListElement prev = getElement(index - 1);
+		tempList.last.next = prev.next;
+		prev.next = tempList.first;
+
+		if (tempList.last.next == null) {
+			last = tempList.last;
+		}
+		return true;
 	}
 
+	
 	@Override
 	public T set(int index, T element) {
-		// TODO: Implement
-		return null;
+		ListElement target = getElement(index);
+		if (target == null) {
+			throw new IndexOutOfBoundsException();
+		}
+		T oldValue = target.value;
+		target.value = element;
+		return oldValue;
 	}
+
 
 	@Override
 	public void add(int index, T element) {
-		// TODO: Implement
+		if (index < 0 || index > size()) {
+			throw new IndexOutOfBoundsException();
+		}
+
+		ListElement newElement = new ListElement(element);
+
+		if (index == 0) {
+			newElement.next = first;
+			first = newElement;
+			if (last == null) {
+				last = newElement;
+			}
+			return;
+		}
+
+		ListElement prev = getElement(index - 1);
+		newElement.next = prev.next;
+		prev.next = newElement;
+
+		if (newElement.next == null) {
+			last = newElement;
+		}
 	}
 
 	@Override
 	public T remove(int index) {
-		// TODO: Implement
-		return null;
+		if (index < 0 || index >= size()) {
+			throw new IndexOutOfBoundsException();
+		}
+
+		if (index == 0) {
+			T removedValue = first.value;
+			first = first.next;
+			if (first == null) {
+				last = null;
+			}
+			return removedValue;
+		}
+
+		ListElement prev = getElement(index - 1);
+		ListElement toRemove = prev.next;
+		prev.next = toRemove.next;
+
+		if (prev.next == null) {
+			last = prev;
+		}
+
+		return toRemove.value;
 	}
+
 
 	@Override
 	public boolean isEmpty() {
