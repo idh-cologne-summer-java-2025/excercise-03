@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class MyLinkedList<T> implements List<T> {
-
+//NICHT FERTIG!!!
 	/**
 	 * Helper class for the list elements
 	 */
@@ -14,7 +14,7 @@ public class MyLinkedList<T> implements List<T> {
 		T value;
 		ListElement next;
 
-		ListElement(T value) {
+		ListElement(T value) { //value könnte man auch payload nenne
 			this.value = value;
 		}
 	}
@@ -26,10 +26,13 @@ public class MyLinkedList<T> implements List<T> {
 	private ListElement first;
 	
 	private ListElement last;
+	
+	private int size = 0;
 
 	@Override
-	public int size() {
-		// TODO Implement!
+	public int size() { //erst add methode
+		int size = 0;
+		ListElement = current
 		return 0;
 	}
 
@@ -46,8 +49,19 @@ public class MyLinkedList<T> implements List<T> {
 	}
 
 	@Override
-	public void add(int index, T element) {
-		// TODO: Implement
+	public void add(int index, T element) { 
+		  ListElement newElement = new ListElement(element);
+	       
+		  if(index = 0) {
+			  newElement.next = first; // first wird zum newElent aber value geht nicht verloren
+			  first = newElement; 
+		  }
+		  else {
+			  ListElement current = getElement(index-1);
+			  newElement.next = current.next; //current ist objekt vor dem was wir einsetzen wollen _> cutten
+			  current.next = newElement;
+		  }
+	    
 	}
 
 	@Override

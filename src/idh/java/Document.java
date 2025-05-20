@@ -3,6 +3,7 @@ package idh.java;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,7 +36,24 @@ public class Document{
 	
 	public static final void main(String[] args) throws IOException {
 		Document d = Document.readFromFile(new File("data/dracula.txt"));
+		Iterator <String> iterator = d.iterator();
+//		while (iterator.hasNext()) {
+//			System.out.println(iterator.next());
+//		}
 		
+		for(String text : d) {
+			System.out.println(text);
+			
+		}
+	}
+	
+	public Iterator <String> iterator(){
+		StringTokenizer str = new StringTokenizer(documentText);
+		List <String> list = new ArrayList<String>();
+		while (str.hasMoreTokens()) {
+			list.add(str.nextToken());
+		}
+		return list.iterator();
 	}
 
 	
