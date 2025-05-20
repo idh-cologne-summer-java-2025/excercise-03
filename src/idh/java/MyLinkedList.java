@@ -29,32 +29,117 @@ public class MyLinkedList<T> implements List<T> {
 
 	@Override
 	public int size() {
-		// TODO Implement!
-		return 0;
+		int count = 0;
+		ListElement current = first;
+	    while (current != null) {
+	        count++;
+	        current = current.next;
+	    }
+	    return count;
 	}
 
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
-		// TODO Implement!
-		return false;
+	    if (index < 0 || index > size()) {
+	        throw new IndexOutOfBoundsException();
+	    }
+	    if (c.isEmpty()) return false;
+
+	    ListElement current = first;
+	    ListElement before = null;
+
+	    for (int i = 0; i < index; i++) {
+	        before = current;
+	        current = current.next;
+	    }
+
+	    ListElement firstNew = null;
+	    ListElement lastNew = null;
+
+	    for (T element : c) {
+	        ListElement newNode = new ListElement(element);
+	        if (firstNew == null) {
+	            firstNew = newNode;
+	        } else {
+	            lastNew.next = newNode;
+	        }
+	        lastNew = newNode;
+	    }
+
+	    if (before != null) {
+	        before.next = firstNew;
+	    } else {
+	        first = firstNew;
+	    }
+
+	    lastNew.next = current;
+
+	    if (current == null) {
+	        last = lastNew;
+	    }
+
+	    return true;
 	}
+
 
 	@Override
 	public T set(int index, T element) {
-		// TODO: Implement
-		return null;
+	    ListElement target = getElement(index);
+	    if (target == null) throw new IndexOutOfBoundsException();
+	    T oldValue = target.value;
+	    target.value = element;
+	    return oldValue;
 	}
+
 
 	@Override
 	public void add(int index, T element) {
-		// TODO: Implement
+	    if (index < 0 || index > size()) throw new IndexOutOfBoundsException();
+
+	    ListElement newNode = new ListElement(element);
+
+	    if (index == 0) {
+	        newNode.next = first;
+	        first = newNode;
+	        if (last == null) last = newNode; // list is empty
+	        return;
+	    }
+
+	    ListElement prev = getElement(index - 1);
+	    newNode.next = prev.next;
+	    prev.next = newNode;
+
+	    if (newNode.next == null) {
+	        last = newNode;
+	    }
 	}
+
 
 	@Override
 	public T remove(int index) {
-		// TODO: Implement
-		return null;
+	    if (index < 0 || index >= size()) throw new IndexOutOfBoundsException();
+
+	    T removedValue;
+
+	    if (index == 0) {
+	        removedValue = first.value;
+	        first = first.next;
+	        if (first == null) last = null;
+	        return removedValue;
+	    }
+
+	    ListElement prev = getElement(index - 1);
+	    ListElement toRemove = prev.next;
+	    removedValue = toRemove.value;
+	    prev.next = toRemove.next;
+
+	    if (prev.next == null) {
+	        last = prev;
+	    }
+
+	    return removedValue;
 	}
+
 
 	@Override
 	public boolean isEmpty() {
@@ -287,14 +372,41 @@ public class MyLinkedList<T> implements List<T> {
 	}
 	
 	public static void main(String[] args) {
-		MyLinkedList<String> ll = new MyLinkedList<String>();
-		ll.add("Hallo");
-		ll.add("Welt");
-		ll.add("Welt");
-		ll.get(0);
-		for (String s : ll) {
-			System.out.println(s);
-		}
+	    MyLinkedList<String> list = new MyLinkedList<>();
 
+	    // Test: add(T e)
+	    list.add("Hallo");
+	    list.add("Welt");
+	    list.add("Java");
+
+	    // Test: size()
+	    System.out.println("Größe: " + list.size()); // Erwartet: 3
+
+	    // Test: get(index)
+	    System.out.println("Element an Index 1: " + list.get(1)); // Erwartet: Welt
+
+	    // Test: add(index, T)
+	    list.add(1, "NEU");
+	    System.out.println("Element an Index 1 nach Einfügen: " + list.get(1)); // Erwartet: NEU
+	    System.out.println("Element an Index 2: " + list.get(2)); // Erwartet: Welt
+
+	    // Test: remove(index)
+	    String entfernt = list.remove(1);
+	    System.out.println("Entferntes Element: " + entfernt); // Erwartet: NEU
+	    System.out.println("Element an Index 1 nach Entfernen: " + list.get(1)); // Erwartet: Welt
+
+	    // Test: set(index, T)
+	    String alt = list.set(1, "Geändert");
+	    System.out.println("Ersetztes Element: " + alt); // Erwartet: Welt
+	    System.out.println("Neuer Wert an Index 1: " + list.get(1)); // Erwartet: Geändert
+
+	    // Test: addAll(index, Collection)
+	    java.util.List<String> neu = java.util.Arrays.asList("X", "Y");
+	    list.addAll(1, neu);
+	    System.out.println("Nach addAll an Index 1:");
+	    for (String s : list) {
+	        System.out.println(s);
+	    }
 	}
+
 }
