@@ -11,6 +11,8 @@ public class LinkedListDemo {
 		for (String s : ll) {
 			System.out.println(s);
 		}
+		
+		System.out.println(ll.size());
 
 	}
 

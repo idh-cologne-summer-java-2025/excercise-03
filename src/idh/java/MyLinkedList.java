@@ -29,32 +29,104 @@ public class MyLinkedList<T> implements List<T> {
 
 	@Override
 	public int size() {
-		// TODO Implement!
-		return 0;
+		int i = 0;
+		
+		ListElement current = first;
+		while (current != null) {
+			i++;
+			current = current.next;
+		}
+		return i;
+		
+		
+		
 	}
 
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
-		// TODO Implement!
-		return false;
+		if (c.isEmpty()) return false;
+
+		Iterator<? extends T> it = c.iterator();
+		ListElement start = new ListElement(it.next());
+		ListElement current = start;
+		while (it.hasNext()) {
+			current.next = new ListElement(it.next());
+			current = current.next;
+		}
+
+		if (index == 0) {
+			current.next = first;
+			first = start;
+			if (last == null) {
+				last = current;
+			}
+			return true;
+		}
+
+		ListElement before = getElement(index - 1);
+		current.next = before.next;
+		before.next = start;
+
+		if (current.next == null) {
+			last = current;
+		}
+
+		return true;
+		
 	}
 
 	@Override
 	public T set(int index, T element) {
-		// TODO: Implement
-		return null;
+		ListElement current = getElement(index);
+		if (current == null) throw new IndexOutOfBoundsException();
+		T oldValue = current.value;
+		current.value = element;
+		return oldValue;
 	}
 
 	@Override
 	public void add(int index, T element) {
-		// TODO: Implement
+		ListElement newElement = new ListElement(element);
+		if (index == 0) {
+			newElement.next = first;
+			first = newElement;
+			if (last == null) {
+				last = newElement;
+			}
+			return;
+		}
+
+		ListElement before = getElement(index - 1);
+		if (before == null) throw new IndexOutOfBoundsException();
+		newElement.next = before.next;
+		before.next = newElement;
+
+		if (newElement.next == null) {
+			last = newElement;
+		}
 	}
 
 	@Override
 	public T remove(int index) {
-		// TODO: Implement
-		return null;
-	}
+		if (index == 0) {
+			if (first == null) throw new IndexOutOfBoundsException();
+			T removedValue = first.value;
+			first = first.next;
+			if (first == null) {
+				last = null;
+			}
+			return removedValue;
+		}
+
+		ListElement before = getElement(index - 1);
+		if (before == null || before.next == null) throw new IndexOutOfBoundsException();
+		T removedValue = before.next.value;
+		before.next = before.next.next;
+
+		if (before.next == null) {
+			last = before;
+		}
+		return removedValue;	}
 
 	@Override
 	public boolean isEmpty() {
