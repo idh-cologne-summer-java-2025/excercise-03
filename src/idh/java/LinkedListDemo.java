@@ -6,8 +6,8 @@ public class LinkedListDemo {
 		MyLinkedList<String> ll = new MyLinkedList<String>();
 		ll.add("Hallo");
 		ll.add("Welt");
-		ll.add("Welt");
-		ll.get(0);
+		ll.add("Welti");
+		ll.get(2);
 		for (String s : ll) {
 			System.out.println(s);
 		}

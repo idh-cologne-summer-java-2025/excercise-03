@@ -29,8 +29,13 @@ public class MyLinkedList<T> implements List<T> {
 
 	@Override
 	public int size() {
-		// TODO Implement!
-		return 0;
+		 int count = 0;
+    ListElement current = first;
+    while (current != null) {
+        count++;
+        current = current.next;
+    }
+    return count;
 	}
 
 	@Override
@@ -41,8 +46,11 @@ public class MyLinkedList<T> implements List<T> {
 
 	@Override
 	public T set(int index, T element) {
-		// TODO: Implement
-		return null;
+    ListElement current = getElement(index);		//getElement(index) → findet das Listenelement
+    if (current == null) throw new IndexOutOfBoundsException(); 
+    T old = current.value;		//old = current.value; → merkt sich den alten Wert
+    current.value = element;		//current.value = element; → ersetzt ihn
+    return old;		//return old; → gibt den alten Wert zurück (wie erwartet)
 	}
 
 	@Override
