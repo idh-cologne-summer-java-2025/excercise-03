@@ -29,36 +29,80 @@ public class MyLinkedList<T> implements List<T> {
 
 	@Override
 	public int size() {
-		// TODO Implement!
 		int counter = 0;
 		while(this.iterator().hasNext()) {
 			counter++;
-		} if(this.iterator().hasNext()==false) {
-			return counter;
 		}
 		return counter;
 	}
 
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
-		// TODO Implement!
+/*		- get collection 
+		- iterate over 
+	    - put in list at specified index, shift all elements to the right if necessary, return true if list changed
+		- Does it even make sense to use the already existing method addAll? Seems redundant
+*/
+		int counter  = 0;
+	
+		while (this.iterator().hasNext()){
+			counter++;
+			if(counter==index) {
+				this.addAll(counter, c); //if index is reached, add all elements starting from that index
+			}
+			return true;
+		}
 		return false;
 	}
 
 	@Override
 	public T set(int index, T element) {
-		// TODO: Implement
-		return null;
+		/* TODO: Implement
+		- create new Element
+		- access element at index
+		- make oldElement.next point at new Element
+		*/
+		ListElement l = new ListElement(element);
+		T rep = (T) this.getElement(index);
+		for(T t: this) {
+			if(index==this.indexOf(t)) {
+				rep = (T) l; //what should the replaced value point to? Can't be null even though it will be deleted afterwards
+			}
+		}
+		return rep;
 	}
 
 	@Override
 	public void add(int index, T element) {
 		// TODO: Implement
+//		create new Node element
+//		add to list at index 
+		ListElement l = new ListElement(element);
+//		this.add(index, (T) l);
+		if(index==0) {
+			l.next = first;
+			first = l;
+		} else {
+			ListElement current = getElement(index-1);
+			l.next = current.next;
+			current.next = l;
+		} 
 	}
 
 	@Override
 	public T remove(int index) {
-		// TODO: Implement
+		/* TODO: Implement
+		 * - iterate over List
+		 * - reach List [index]
+		 * - make List[index-1].next point elsewhere/or at List[index]?*/
+		for(T t: this) {
+			if(this.indexOf(t)==index) {
+				ListElement prev = this.getElement(index-1); //ListEle prev pointing 1 index in front of he current element
+				this.getElement(index).next = null; //set current element to null, discard via Java GC
+				prev = prev.next; //set prev.next (current) as new node
+				
+			}
+		}
 		return null;
 	}
 
@@ -301,6 +345,7 @@ public class MyLinkedList<T> implements List<T> {
 		for (String s : ll) {
 			System.out.println(s);
 		}
+//		does nothing apparently
 		System.out.println(ll.size());
 
 	}
