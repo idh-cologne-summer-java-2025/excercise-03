@@ -38,7 +38,7 @@ public class MyLinkedList<T> implements List<T> {
 
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
-/*		- get collection 
+/*		- get collection -> seems like I should have created a new List Object and insert that one -_-
 		- iterate over 
 	    - put in list at specified index, shift all elements to the right if necessary, return true if list changed
 		- Does it even make sense to use the already existing method addAll? Seems redundant
