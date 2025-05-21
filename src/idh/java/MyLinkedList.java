@@ -6,14 +6,16 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class MyLinkedList<T> implements List<T> {
-
+	private int size = 0;
 	/**
 	 * Helper class for the list elements
 	 */
-	private class ListElement {
+
+	class ListElement {
 		T value;
 		ListElement next;
-
+		ListElement last;
+		
 		ListElement(T value) {
 			this.value = value;
 		}
@@ -24,39 +26,53 @@ public class MyLinkedList<T> implements List<T> {
 	 * know whether there is a next element.
 	 */
 	private ListElement first;
-	
 	private ListElement last;
 
 	@Override
 	public int size() {
-		// TODO Implement!
-		return 0;
+		return size;
 	}
 
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
-		// TODO Implement!
-		return false;
+	       addAll(size, c);
+	       return false;
 	}
 
 	@Override
-	public T set(int index, T element) {
-		// TODO: Implement
-		return null;
+	public T set(int index, T value) {
+        ListElement newElement = new ListElement(value);
+        ListElement prevElement = getElement(index-1);
+        ListElement nextElement = getElement(index+1);
+        prevElement.next = newElement;
+        newElement.next = nextElement;
+        return null;
+    }
+		
+	@Override
+	public void add(int index, T value) {
+        ListElement newElement = new ListElement(value);
+              
+        if (index == 0) {
+            newElement.next = first;
+            first = newElement;
+        } else {
+            ListElement current = getElement(index-1);
+            newElement.next = current.next;
+            current.next = newElement;
+        }
+        size++;
 	}
 
-	@Override
-	public void add(int index, T element) {
-		// TODO: Implement
+    public T remove(int index) {
+        ListElement prevElement = getElement(index-1);
+        ListElement nextElement = getElement(index+1);
+        prevElement.next = nextElement;
+        size--;
+        return null;
 	}
 
-	@Override
-	public T remove(int index) {
-		// TODO: Implement
-		return null;
-	}
-
-	@Override
+    @Override
 	public boolean isEmpty() {
 		return first == null;
 	}
@@ -285,16 +301,23 @@ public class MyLinkedList<T> implements List<T> {
 		// Diese Methode können Sie erst einmal ignorieren
 		return false;
 	}
-	
+		   
 	public static void main(String[] args) {
 		MyLinkedList<String> ll = new MyLinkedList<String>();
 		ll.add("Hallo");
 		ll.add("Welt");
 		ll.add("Welt");
+		ll.set(2,"World");
+		ll.addAll(ll); // funktioniert scheinbar nicht...
+		ll.get(0);
+		ll.remove(2);
 		ll.get(0);
 		for (String s : ll) {
 			System.out.println(s);
 		}
-
+		ll.remove(1);
+		for (String s : ll) {
+			System.out.println(s);
+		}
 	}
 }
