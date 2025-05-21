@@ -24,36 +24,117 @@ public class MyLinkedList<T> implements List<T> {
 	 * know whether there is a next element.
 	 */
 	private ListElement first;
-	
+
 	private ListElement last;
 
+	/**
+	 * Internal method to get the list element (not the value) of the list at the
+	 * specified index position.
+	 * 
+	 * @param index
+	 * @return
+	 */
+	private ListElement getElement(int index) {
+		if (isEmpty())
+			return null;
+		ListElement current = first;
+		while (current != null) {
+			if (index == 0)
+				return current;
+			index--;
+			current = current.next;
+		}
+		return null;
+	}
+	
 	@Override
 	public int size() {
-		// TODO Implement!
-		return 0;
+		int i = 0;
+		ListElement current = first;
+		while(current!=null) {
+			i++;
+			current=current.next;
+		}
+		return i;
 	}
 
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
-		// TODO Implement!
-		return false;
+		// Create new list elements for the collection to be added
+		ListElement firstOfNewList = null, previous = null, currentOfNewList = null;
+		// this works because Collection<T> inherits from Iterable<T>
+		for (T type : c) {
+			currentOfNewList = new ListElement(type);
+			if (firstOfNewList == null) {
+				firstOfNewList = currentOfNewList;
+			} else {
+				previous.next = currentOfNewList;
+			}
+			previous = currentOfNewList;
+		}
+		// Now firstOfNewList is the first element of the list to be inserted, and
+		// currentOfNewList is the last one
+
+		// insert the new list at the position
+		if (index == 0) {
+			currentOfNewList.next = first;
+			this.first = firstOfNewList;
+		} else {
+			ListElement atPosition = getElement(index - 1);
+			if (atPosition == null) {
+				return false;
+			}
+
+			// set the pointers correctly
+			currentOfNewList.next = atPosition.next;
+			atPosition.next = firstOfNewList;
+		}
+		return true;
 	}
 
 	@Override
 	public T set(int index, T element) {
-		// TODO: Implement
-		return null;
+		ListElement listElement = getElement(index);
+		// Since we want to return the old value, we need to store it
+		T returnValue = listElement.value;
+
+		// Because we're overwriting, we just have to change the value of the existing
+		// element, without touching any of the next fields
+		listElement.value = element;
+		return returnValue;
 	}
 
 	@Override
 	public void add(int index, T element) {
-		// TODO: Implement
+		ListElement newElement = new ListElement(element);
+
+		// special case if we want to add something at the beginning of the list
+		if (index == 0) {
+			newElement.next = first;
+			first = newElement;
+		} else {
+			ListElement atPosition = getElement(index);
+			newElement.next = atPosition.next;
+			atPosition.next = newElement;
+		}
 	}
 
 	@Override
 	public T remove(int index) {
-		// TODO: Implement
-		return null;
+		T valueAtFormerPosition;
+		if (index == 0) {
+			valueAtFormerPosition = first.value;
+			first = first.next;
+		} else {
+			ListElement atPreviousPosition = getElement(index - 1);
+
+			// store the value of the element (because we want to return it)
+			valueAtFormerPosition = atPreviousPosition.next.value;
+
+			// "Reroute" the pointer around the element to be removed
+			atPreviousPosition.next = atPreviousPosition.next.next;
+		}
+		return valueAtFormerPosition;
 	}
 
 	@Override
@@ -105,7 +186,7 @@ public class MyLinkedList<T> implements List<T> {
 			first = newListElement;
 			last = first;
 		}
-		
+
 		else {
 			last.next = newListElement;
 			last = last.next;
@@ -252,28 +333,8 @@ public class MyLinkedList<T> implements List<T> {
 		throw new UnsupportedOperationException();
 	}
 
-
-	/**
-	 * Internal method to get the list element (not the value) of the list at the
-	 * specified index position.
-	 * 
-	 * @param index
-	 * @return
-	 */
-	private ListElement getElement(int index) {
-		if (isEmpty())
-			return null;
-		ListElement current = first;
-		while (current != null) {
-			if (index == 0)
-				return current;
-			index--;
-			current = current.next;
-		}
-		return null;
-	}
-
 	
+
 	@Override
 	public boolean contains(Object o) {
 		// Diese Methode können Sie erst einmal ignorieren
@@ -285,7 +346,7 @@ public class MyLinkedList<T> implements List<T> {
 		// Diese Methode können Sie erst einmal ignorieren
 		return false;
 	}
-	
+
 	public static void main(String[] args) {
 		MyLinkedList<String> ll = new MyLinkedList<String>();
 		ll.add("Hallo");

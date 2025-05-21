@@ -7,10 +7,15 @@ public class LinkedListDemo {
 		ll.add("Hallo");
 		ll.add("Welt");
 		ll.add("Welt");
+		ll.add("Welt");
+		ll.add("Welt");
 		ll.get(0);
 		for (String s : ll) {
 			System.out.println(s);
 		}
+		
+		System.out.println(ll.size());
+		
 
 	}
 
