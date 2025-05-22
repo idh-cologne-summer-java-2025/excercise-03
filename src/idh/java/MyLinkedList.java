@@ -35,8 +35,30 @@ public class MyLinkedList<T> implements List<T> {
 
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
-	       addAll(size, c);
-	       return false;
+		ListElement firstOfNewList = null;
+		ListElement previous = null;
+		ListElement currentOfNewList = null;
+		for (T type : c) {
+			currentOfNewList = new ListElement(type);
+			if (firstOfNewList == null) {
+				firstOfNewList = currentOfNewList;
+			} else {
+				previous.next = currentOfNewList;
+			}
+			previous = currentOfNewList;
+		}
+		if (index == 0) {
+			currentOfNewList.next = first;
+			this.first = firstOfNewList;
+		} else {
+			ListElement atPosition = getElement(index - 1);
+			if (atPosition == null) {
+				return false;
+			}
+			currentOfNewList.next = atPosition.next;
+			atPosition.next = firstOfNewList;
+		}
+	    return true;
 	}
 
 	@Override
@@ -308,14 +330,9 @@ public class MyLinkedList<T> implements List<T> {
 		ll.add("Welt");
 		ll.add("Welt");
 		ll.set(2,"World");
-		ll.addAll(ll); // funktioniert scheinbar nicht...
-		ll.get(0);
+		ll.get(2);
 		ll.remove(2);
-		ll.get(0);
-		for (String s : ll) {
-			System.out.println(s);
-		}
-		ll.remove(1);
+		ll.addAll(0,ll);
 		for (String s : ll) {
 			System.out.println(s);
 		}
