@@ -29,31 +29,115 @@ public class MyLinkedList<T> implements List<T> {
 
 	@Override
 	public int size() {
-		// TODO Implement!
-		return 0;
+		int count = 0;
+		ListElement current = first;
+		while (current != null) {
+			count++;
+			current = current.next;
+		}
+		return count;
 	}
 
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
-		// TODO Implement!
-		return false;
+		if (index < 0 || index > size()) {
+			throw new IndexOutOfBoundsException();
+		}
+
+		if (c.isEmpty()) return false;
+
+		ListElement next = getElement(index);
+		ListElement prev = (index == 0) ? null : getElement(index - 1);
+
+		ListElement firstNew = null;
+		ListElement lastNew = null;
+
+		for (T item : c) {
+			ListElement newElem = new ListElement(item);
+			if (firstNew == null) {
+				firstNew = lastNew = newElem;
+			} else {
+				lastNew.next = newElem;
+				lastNew = newElem;
+			}
+		}
+
+		if (prev == null) {
+			lastNew.next = first;
+			first = firstNew;
+		} else {
+			lastNew.next = prev.next;
+			prev.next = firstNew;
+		}
+
+		if (lastNew.next == null) {
+			last = lastNew;
+		}
+
+		return true;
 	}
 
 	@Override
 	public T set(int index, T element) {
-		// TODO: Implement
-		return null;
+		ListElement target = getElement(index);
+		if (target == null) {
+			throw new IndexOutOfBoundsException();
+		}
+		T old = target.value;
+		target.value = element;
+		return old;
 	}
 
 	@Override
 	public void add(int index, T element) {
-		// TODO: Implement
+		if (index < 0 || index > size()) {
+			throw new IndexOutOfBoundsException();
+		}
+
+		ListElement newElement = new ListElement(element);
+
+		if (index == 0) {
+			newElement.next = first;
+			first = newElement;
+			if (last == null) {
+				last = first;
+			}
+			return;
+		}
+
+		ListElement prev = getElement(index - 1);
+		newElement.next = prev.next;
+		prev.next = newElement;
+
+		if (newElement.next == null) {
+			last = newElement;
+		}
 	}
 
 	@Override
 	public T remove(int index) {
-		// TODO: Implement
-		return null;
+		if (index < 0 || index >= size()) {
+			throw new IndexOutOfBoundsException();
+		}
+
+		if (index == 0) {
+			T value = first.value;
+			first = first.next;
+			if (first == null) {
+				last = null;
+			}
+			return value;
+		}
+
+		ListElement prev = getElement(index - 1);
+		ListElement toRemove = prev.next;
+		prev.next = toRemove.next;
+
+		if (prev.next == null) {
+			last = prev;
+		}
+
+		return toRemove.value;
 	}
 
 	@Override
@@ -144,6 +228,7 @@ public class MyLinkedList<T> implements List<T> {
 	@Override
 	public void clear() {
 		first = null;
+		last = null;
 	}
 
 	@Override
