@@ -30,7 +30,7 @@ public class MyLinkedList<T> implements List<T> {
 	@Override
 	public int size() {
 		// TODO Implement!
-		return 0;
+		return size;
 	}
 
 	@Override
@@ -47,7 +47,17 @@ public class MyLinkedList<T> implements List<T> {
 
 	@Override
 	public void add(int index, T element) {
-		// TODO: Implement
+	ListElement newElement = new ListElement (element);
+	if (index == 0)
+	{ newElement.next = first;
+		first = newElement;
+	}
+	else {
+		ListElement current = getElement(index-1);
+		newElement.next = current.next;
+		current.next = newElement;
+		}
+	
 	}
 
 	@Override
