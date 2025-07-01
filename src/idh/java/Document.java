@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class Document{
+public class Document implements Iterable <String> {
 	String documentText;
 
 	public static Document readFromFile(File f) throws IOException {
@@ -33,8 +33,36 @@ public class Document{
 		this.documentText = documentText;
 	}
 	
+	public Iterator <String> interator() {
+		return new DocumentIterator(documentText);
+	}
+	
+	class DocumentIterator implements Iterator <String> {
+		
+		
+	
+		StringTokenizer st;
+		public DocumentIterator(String s) {
+			st = new StringTokenizer(s);
+		}
+		
+		
+	public boolean hasNext() {
+		return st.hasMoreTokens();
+	}
+	
+	public String next() {
+		return st.nextToken();
+	}
+	
+	}
+	
+	
 	public static final void main(String[] args) throws IOException {
 		Document d = Document.readFromFile(new File("data/dracula.txt"));
+		
+		for (String word : d) {
+			System.out.println(word);
 		
 	}
 
